@@ -2,6 +2,16 @@ import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+interface Props {
+  onSubmit: (data: ExpenseItem) => void;
+}
+
+interface ExpenseItem {
+  description: string;
+  amount: number;
+  category: number;
+}
+
 const schema = z.object({
   description: z
     .string()
@@ -14,17 +24,27 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const TrackingForm = () => {
+const TrackingForm = ({ onSubmit }: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const onSubmit = (data: FieldValues) => console.log(data);
+  /*  const onSubmit = (data: FieldValues) => {
+    console.log(data);
+  }; */
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit((data) =>
+        onSubmit({
+          description: data.description,
+          amount: data.amount,
+          category: data.category,
+        })
+      )}
+    >
       <div className="mb-3">
         <label htmlFor="description" className="form-label">
           Description
@@ -61,8 +81,9 @@ const TrackingForm = () => {
           {...register("category", { valueAsNumber: true })}
           id="category"
           className="form-select"
+          defaultValue="0"
         >
-          <option selected>Select</option>
+          <option value="0">Select</option>
           <option value="1">Groceries</option>
           <option value="2">Utilities</option>
           <option value="3">Entertainment</option>
