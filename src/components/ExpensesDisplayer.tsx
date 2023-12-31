@@ -1,12 +1,15 @@
+import Button from "./Button";
+
 interface ExpenseItem {
+  id: number;
   description: string;
   amount: number;
-  category: number;
+  category: string;
 }
 
 interface Props {
   expenseList: ExpenseItem[];
-  onDelete: (item: ExpenseItem) => void;
+  onDelete: (id: number) => void;
 }
 
 const ExpensesDisplayer = ({ expenseList, onDelete }: Props) => {
@@ -20,20 +23,36 @@ const ExpensesDisplayer = ({ expenseList, onDelete }: Props) => {
             <th>Category</th>
             <th></th>
           </tr>
-
+        </thead>
+        <tbody>
           {expenseList.map((item) => {
             return (
-              <tr>
+              <tr key={item.id}>
                 <td>{item.description}</td>
-                <td>{item.amount}</td>
+                <td>${item.amount}</td>
                 <td>{item.category}</td>
                 <td>
-                  <button>Delete</button>
+                  <Button color="danger" onClick={() => onDelete(item.id)}>
+                    Delete
+                  </Button>
                 </td>
               </tr>
             );
           })}
-        </thead>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total</td>
+            <td>
+              $
+              {expenseList
+                .reduce((acc, item) => item.amount + acc, 0)
+                .toFixed(2)}
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
       </table>
     </>
   );
