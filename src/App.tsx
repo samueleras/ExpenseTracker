@@ -1,10 +1,15 @@
-import { useState } from "react";
 import "./App.css";
+import TrackingForm from "./components/TrackingForm";
+import ExpensesDisplayer from "./components/ExpensesDisplayer";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return <></>;
+  return (
+    <>
+      <h1>ExpenseTracker</h1>
+      <TrackingForm />
+      <ExpensesDisplayer />
+    </>
+  );
 }
 
 export default App;
